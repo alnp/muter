@@ -9,6 +9,7 @@ class FileManagerSpy: Spy, FileSystemManager {
     private(set) var searchPathDirectories: [FileManager.SearchPathDirectory] = []
     private(set) var domains: [FileManager.SearchPathDomainMask] = []
     private(set) var copyPaths: [(source: String, dest: String)] = []
+    private(set) var contentsOfDirectories: [(url: URL, keys: [URLResourceKey]?, options: FileManager.DirectoryEnumerationOptions)] = []
 
     var tempDirectory: URL!
     var fileContentsToReturn: Data!
@@ -16,6 +17,7 @@ class FileManagerSpy: Spy, FileSystemManager {
     var errorToThrow: Error?
     var subpathsToReturn: [String]?
     var fileExistsToReturn: Bool!
+    var contentsOfDirectory: [URL]!
 
     var currentDirectoryPath: String {
         return currentDirectoryPathToReturn 
@@ -35,6 +37,14 @@ class FileManagerSpy: Spy, FileSystemManager {
         paths.append(path)
 
         return true
+    }
+    
+    func contentsOfDirectory(at url: URL,
+                             includingPropertiesForKeys keys: [URLResourceKey]?,
+                             options mask: FileManager.DirectoryEnumerationOptions) throws -> [URL] {
+        methodCalls.append(#function)
+        contentsOfDirectories.append((url: url, keys: keys, options: mask))
+        return contentsOfDirectory
     }
 
     func url(for directory: FileManager.SearchPathDirectory,

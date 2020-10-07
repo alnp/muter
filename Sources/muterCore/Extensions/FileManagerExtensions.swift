@@ -13,6 +13,10 @@ public protocol FileSystemManager {
              in domain: FileManager.SearchPathDomainMask,
              appropriateFor url: URL?,
              create shouldCreate: Bool) throws -> URL
+    
+    func contentsOfDirectory(at url: URL,
+                             includingPropertiesForKeys keys: [URLResourceKey]?,
+                             options mask: FileManager.DirectoryEnumerationOptions) throws -> [URL]
 
     func copyItem(atPath srcPath: String,
                   toPath dstPath: String) throws

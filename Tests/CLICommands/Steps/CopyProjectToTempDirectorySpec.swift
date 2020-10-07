@@ -20,6 +20,7 @@ class CopyProjectToTempDirectorySpec: QuickSpec {
                 beforeEach {
                     fileManagerSpy = FileManagerSpy()
                     fileManagerSpy.tempDirectory = URL(string: "/tmp/")!
+                    fileManagerSpy.contentsOfDirectory = [URL(string: "/some/projectName")!]
                     
                     state = RunCommandState()
                     state.projectDirectoryURL = URL(string: "/some/projectName")!
@@ -44,6 +45,13 @@ class CopyProjectToTempDirectorySpec: QuickSpec {
                     expect(fileManagerSpy.paths).to(equal(["/some/projectName"]))
                 }
                 
+                it("lists the project folder contents, skipping hidden files") {
+                    expect(fileManagerSpy.contentsOfDirectories.first?.url).to(equal(URL(string: "/some/projectName")))
+                    expect(fileManagerSpy.contentsOfDirectories.first?.keys).to(beNil())
+                    expect(fileManagerSpy.contentsOfDirectories.first?.options).to(equal([.skipsHiddenFiles]))
+                    expect(fileManagerSpy.contentsOfDirectories).to(haveCount(1))
+                }
+                
                 it("copies the project to the temp directory") {
                     expect(fileManagerSpy.copyPaths.first?.source).to(equal("/some/projectName"))
                     expect(fileManagerSpy.copyPaths.first?.dest).to(equal("/tmp/projectName"))
@@ -52,7 +60,43 @@ class CopyProjectToTempDirectorySpec: QuickSpec {
                 
                 it("copies the project after creating the temp directory") {
                     expect(fileManagerSpy.methodCalls).to(equal(["url(for:in:appropriateFor:create:)",
+                                                                 "contentsOfDirectory(at:includingPropertiesForKeys:options:)",
                                                                  "copyItem(atPath:toPath:)"]))
+                }
+                
+            }
+
+            context("when it's copying a project") {
+                beforeEach {
+                    FileManager.default.createHiddenFile()
+                    
+                    state = RunCommandState()
+                    state.projectDirectoryURL = FileManager.default.unitTestsDirectory
+                    
+                    copyProjectToTempDirectory = CopyProjectToTempDirectory(fileManager: FileManager.default)
+                    
+                    _ = copyProjectToTempDirectory.run(with: state)
+                }
+                
+                it("shouldn't copy hidden files") {
+                    let temporaryDirectory = try! FileManager.default.url(
+                        for: .itemReplacementDirectory,
+                        in: .userDomainMask,
+                        appropriateFor: state.projectDirectoryURL,
+                        create: true
+                    )
+
+                    let filesCopied = try! FileManager.default.contentsOfDirectory(
+                        at: temporaryDirectory,
+                        includingPropertiesForKeys: nil,
+                        options: []
+                    )
+                    
+                    expect(filesCopied).to(beEmpty())
+                }
+                
+                afterEach {
+                    FileManager.default.tearDown()
                 }
             }
             
@@ -80,5 +124,24 @@ class CopyProjectToTempDirectorySpec: QuickSpec {
                 }
             }
         }
+    }
+}
+
+private extension FileManager {
+    func createHiddenFile() {
+        try! FileManager.default.createDirectory(
+            at: unitTestsDirectory.appendingPathComponent(".hidden"),
+            withIntermediateDirectories: true,
+            attributes: nil
+        )
+    }
+    
+    var unitTestsDirectory: URL {
+        FileManager.default.homeDirectoryForCurrentUser
+            .appendingPathComponent("unitTest", isDirectory: true)
+    }
+    
+    func tearDown() {
+        try! FileManager.default.removeItem(at: unitTestsDirectory)
     }
 }
