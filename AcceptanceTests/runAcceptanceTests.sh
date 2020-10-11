@@ -61,6 +61,15 @@ rm -rf ./muter_logs # don't pollute the staging area
 
 cd ../..
 
+echo "Running Muter on an example test suite exits with error..."
+
+cd ./Repositories/ProjectWithCommandFailures
+
+"$muterdir"/muter > "$samplesdir"/muters_testing_exit_code_output.txt
+rm -rf ./muter_logs # don't pollute the staging area
+
+cd ../..
+
 echo "Running Muter's help command..."
 cd ./Repositories/ExampleApp
 

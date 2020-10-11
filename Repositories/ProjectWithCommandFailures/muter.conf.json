@@ -1,0 +1,9 @@
+{
+  "arguments" : [
+    "make",
+    "test"
+  ],
+  "exclude" : [],
+  "excludeCalls" : [],
+  "executable" : "/usr/bin/xcodebuild"
+}

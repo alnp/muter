@@ -3,7 +3,8 @@ import Foundation
 protocol MutationTestingIODelegate {
     func backupFile(at path: String, using swapFilePaths: [FilePath: FilePath])
     func writeFile(to path: String, contents: String) throws
-    func runTestSuite(using configuration: MuterConfiguration, savingResultsIntoFileNamed fileName: String) -> (outcome: TestSuiteOutcome, testLog: String)
+    func runTestSuite(using configuration: MuterConfiguration,
+                      savingResultsIntoFileNamed fileName: String) -> (outcome: TestSuiteOutcome, testLog: String)
     func restoreFile(at path: String, using swapFilePaths: [FilePath: FilePath])
 }
 
@@ -31,6 +32,21 @@ struct MutationTestingDelegate: MutationTestingIODelegate {
 
             let contents = try String(contentsOf: testLogUrl)
 
+            let processExitCode = process.terminationStatus
+            guard processExitCode == 0 else {
+                let reason = process.terminationReason
+                throw IOError.exitCode("""
+                    The testing process ended with error code \(processExitCode), please check your testing command on muter.conf.json.
+                    
+                    \(reason)
+                    
+                    Your test log is:
+                    
+                    \(contents)
+                    """
+                )
+            }
+            
             return (
                 outcome: TestSuiteOutcome.from(testLog: contents),
                 testLog: contents
@@ -48,7 +64,6 @@ struct MutationTestingDelegate: MutationTestingIODelegate {
 }
 
 private extension MutationTestingDelegate {
-
     func copySourceCode(fromFileAt sourcePath: String, to destinationPath: String) {
         let source = sourceCode(fromFileAt: sourcePath)
         try? source?.code.description.write(toFile: destinationPath, atomically: true, encoding: .utf8)
@@ -65,7 +80,6 @@ private extension MutationTestingDelegate {
     }
 
     func testProcess(with configuration: MuterConfiguration, and fileHandle: FileHandle) throws -> Process {
-
         let process = Process()
         process.arguments = configuration.testCommandArguments
         process.executableURL = URL(fileURLWithPath: configuration.testCommandExecutable)
@@ -74,4 +88,8 @@ private extension MutationTestingDelegate {
 
         return process
     }
+}
+
+enum IOError: Error {
+    case exitCode(String)
 }
