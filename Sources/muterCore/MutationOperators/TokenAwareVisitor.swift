@@ -30,7 +30,7 @@ class TokenAwareVisitor: SyntaxAnyVisitor, PositionDiscoveringVisitor {
 
     private func canMutateToken(_ token: TokenSyntax) -> Bool {
         tokensToDiscover.contains(token.tokenKind) &&
-        token.parent?.is(BinaryOperatorExprSyntax.self) == true
+        (token.parent?.is(BinaryOperatorExprSyntax.self) == true || token.parent?.is(BooleanLiteralExprSyntax.self) == true)
     }
 }
 
@@ -65,6 +65,18 @@ enum ChangeLogicalConnectorOperator {
             tokensToDiscover = [
                 .spacedBinaryOperator("||"),
                 .spacedBinaryOperator("&&"),
+            ]
+        }
+    }
+}
+
+enum BooleanSwapOperator {
+    class Visitor: TokenAwareVisitor {
+        required init(configuration: MuterConfiguration? = nil, sourceFileInfo: SourceFileInfo) {
+            super.init(configuration: configuration, sourceFileInfo: sourceFileInfo)
+            tokensToDiscover = [
+                .trueKeyword,
+                .falseKeyword,
             ]
         }
     }

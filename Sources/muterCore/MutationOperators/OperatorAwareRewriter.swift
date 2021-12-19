@@ -10,28 +10,36 @@ class OperatorAwareRewriter: SyntaxRewriter, PositionSpecificRewriter {
     required init(positionToMutate: MutationPosition) {
         self.positionToMutate = positionToMutate
     }
-
+    
     override func visit(_ token: TokenSyntax) -> Syntax {
         guard token.position == positionToMutate,
-            let oppositeOperator = oppositeOperator(for: token.tokenKind) else {
-                return Syntax(token)
-        }
-
+              let oppositeOperator = oppositeOperator(for: token.tokenKind) else {
+                  return Syntax(token)
+              }
+        
         operatorSnapshot = MutationOperatorSnapshot(
             before: token.description.trimmed,
             after: oppositeOperator,
             description: "changed \(token.description.trimmed) to \(oppositeOperator)"
         )
-
+        
         return mutated(token, using: oppositeOperator)
     }
     
     private func oppositeOperator(for tokenKind: TokenKind) -> String? {
-        guard case .spacedBinaryOperator(let `operator`) = tokenKind else {
+        switch tokenKind {
+            
+        case .falseKeyword:
+            return oppositeOperatorMapping["false"]
+        case .trueKeyword:
+            return oppositeOperatorMapping["true"]
+        case .spacedBinaryOperator(let `operator`):
+            return oppositeOperatorMapping[`operator`]
+            
+        default:
             return nil
         }
         
-        return oppositeOperatorMapping[`operator`]
     }
     
     private func mutated(_ token: TokenSyntax, using `operator`: String) -> Syntax {

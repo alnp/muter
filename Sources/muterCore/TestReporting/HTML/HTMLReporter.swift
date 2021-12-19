@@ -241,6 +241,7 @@ private extension MutationOperator.Id {
         case .ror: return "Relational Operator Replacement"
         case .removeSideEffects: return "Remove Side Effects"
         case .logicalOperator: return "Change Logical Connector"
+        case .booleanSwap: return "Boolean swap"
         }
     }
 }

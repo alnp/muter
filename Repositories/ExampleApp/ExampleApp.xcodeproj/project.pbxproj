@@ -33,6 +33,9 @@
 		9D3C427021EAB2A100A3474C /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D13CAC9218FC9F800DB1FDA /* ViewController.swift */; };
 		9D3C427121EAB2A600A3474C /* Module.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D13CAF5218FCB1C00DB1FDA /* Module.swift */; };
 		9DA60E9521ACA53E00B02CB4 /* Module2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DA60E9421ACA53E00B02CB4 /* Module2.swift */; };
+		BE6B314F276FD09200AE3880 /* Module3.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE6B314E276FD09100AE3880 /* Module3.swift */; };
+		BE6B3150276FD09700AE3880 /* Module3.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE6B314E276FD09100AE3880 /* Module3.swift */; };
+		BE6B3152276FD0DD00AE3880 /* Module3Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE6B3151276FD0DD00AE3880 /* Module3Tests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -48,6 +51,8 @@
 		9D13CADE218FC9FA00DB1FDA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		9D13CAF5218FCB1C00DB1FDA /* Module.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Module.swift; sourceTree = "<group>"; };
 		9DA60E9421ACA53E00B02CB4 /* Module2.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Module2.swift; sourceTree = "<group>"; };
+		BE6B314E276FD09100AE3880 /* Module3.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Module3.swift; sourceTree = "<group>"; };
+		BE6B3151276FD0DD00AE3880 /* Module3Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Module3Tests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -89,6 +94,7 @@
 		9D13CAC6218FC9F800DB1FDA /* ExampleApp */ = {
 			isa = PBXGroup;
 			children = (
+				BE6B314E276FD09100AE3880 /* Module3.swift */,
 				9DA60E9421ACA53E00B02CB4 /* Module2.swift */,
 				9D13CAC7218FC9F800DB1FDA /* AppDelegate.swift */,
 				9D13CAC9218FC9F800DB1FDA /* ViewController.swift */,
@@ -105,6 +111,7 @@
 			isa = PBXGroup;
 			children = (
 				9D13CADC218FC9FA00DB1FDA /* ModuleTests.swift */,
+				BE6B3151276FD0DD00AE3880 /* Module3Tests.swift */,
 				9D13CADE218FC9FA00DB1FDA /* Info.plist */,
 			);
 			path = ExampleAppTests;
@@ -236,6 +243,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				9DA60E9521ACA53E00B02CB4 /* Module2.swift in Sources */,
+				BE6B314F276FD09200AE3880 /* Module3.swift in Sources */,
 				9D13CACA218FC9F800DB1FDA /* ViewController.swift in Sources */,
 				9D13CAC8218FC9F800DB1FDA /* AppDelegate.swift in Sources */,
 				9D13CAF6218FCB1C00DB1FDA /* Module.swift in Sources */,
@@ -247,8 +255,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				9D3C427121EAB2A600A3474C /* Module.swift in Sources */,
+				BE6B3150276FD09700AE3880 /* Module3.swift in Sources */,
 				9D3C426E21EAB2A100A3474C /* Module2.swift in Sources */,
 				9D3C426F21EAB2A100A3474C /* AppDelegate.swift in Sources */,
+				BE6B3152276FD0DD00AE3880 /* Module3Tests.swift in Sources */,
 				9D3C427021EAB2A100A3474C /* ViewController.swift in Sources */,
 				9D13CADD218FC9FA00DB1FDA /* ModuleTests.swift in Sources */,
 			);

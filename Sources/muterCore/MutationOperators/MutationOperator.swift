@@ -31,23 +31,27 @@ extension MutationPoint: Nullable {
 
 struct MutationOperator {
     public enum Id: String, Codable, CaseIterable {
-        case ror = "RelationalOperatorReplacement"
-        case removeSideEffects = "RemoveSideEffects"
-        case logicalOperator = "ChangeLogicalConnector"
-        
-        var rewriterVisitorPair: (rewriter: RewriterInitializer, visitor: VisitorInitializer) {
-            switch self {
-            case .removeSideEffects:
-               return (rewriter: RemoveSideEffectsOperator.Rewriter.init,
-                       visitor: RemoveSideEffectsOperator.Visitor.init)
-            case .ror:
-                return (rewriter: ROROperator.Rewriter.init,
-                        visitor: ROROperator.Visitor.init)
-            case .logicalOperator:
-                return (rewriter: ChangeLogicalConnectorOperator.Rewriter.init,
-                        visitor: ChangeLogicalConnectorOperator.Visitor.init)
+            case ror = "RelationalOperatorReplacement"
+            case removeSideEffects = "RemoveSideEffects"
+            case logicalOperator = "ChangeLogicalConnector"
+            case booleanSwap = "BooleanSwapOperator"
+            
+            var rewriterVisitorPair: (rewriter: RewriterInitializer, visitor: VisitorInitializer) {
+                switch self {
+                case .removeSideEffects:
+                   return (rewriter: RemoveSideEffectsOperator.Rewriter.init,
+                           visitor: RemoveSideEffectsOperator.Visitor.init)
+                case .ror:
+                    return (rewriter: ROROperator.Rewriter.init,
+                            visitor: ROROperator.Visitor.init)
+                case .logicalOperator:
+                    return (rewriter: ChangeLogicalConnectorOperator.Rewriter.init,
+                            visitor: ChangeLogicalConnectorOperator.Visitor.init)
+                case .booleanSwap:
+                    return (rewriter: BooleanSwapOperator.Rewriter.init,
+                            visitor: BooleanSwapOperator.Visitor.init)
+                }
             }
-        }
         
         func mutationOperator(for position: MutationPosition) -> SourceCodeTransformation {
             return { source in
